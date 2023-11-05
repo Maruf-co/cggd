@@ -33,6 +33,9 @@ void save_resource(cg::resource<cg::unsigned_color>& render_target, const std::f
 	if (result != 1)
 		THROW_ERROR("Can't save the resource");
 
-	std::system(view_command(filepath).c_str());
+	std::string view_command("open ");
+	view_command.append(filepath.string());
+
+	std::system(view_command.c_str());
 }
 

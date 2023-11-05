@@ -20,7 +20,7 @@ void cg::renderer::rasterization_renderer::init()
 	camera->set_phi(settings->camera_phi);
 	camera->set_theta(settings->camera_theta);
 	camera->set_angle_of_view(settings->camera_angle_of_view);
-	camera->set_z_near(settings->camera_z_far);
+	camera->set_z_near(settings->camera_z_near);
 	camera->set_z_far(settings->camera_z_far);
 }
 void cg::renderer::rasterization_renderer::render()

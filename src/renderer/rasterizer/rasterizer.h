@@ -109,9 +109,18 @@ namespace cg::renderer
 		while (vertex_id < vertex_offset + num_vertexes)
 		{
 			std::vector<VB> vertices(3);
-			vertices[0] = vertex_buffer->item(index_buffer->item(vertex_id++));
-			vertices[1] = vertex_buffer->item(index_buffer->item(vertex_id++));
-			vertices[2] = vertex_buffer->item(index_buffer->item(vertex_id++));
+			vertices[0] = vertex_buffer->item(
+					index_buffer->item(vertex_id++)
+			);
+
+			vertices[1] = vertex_buffer->item(
+					index_buffer->item(vertex_id++)
+			);
+
+
+			vertices[2] = vertex_buffer->item(
+					index_buffer->item(vertex_id++)
+			);
 			for (auto& vertex : vertices)
 			{
 				float4 coords{vertex.x, vertex.y, vertex.z, 1.f};
@@ -128,9 +137,17 @@ namespace cg::renderer
 			float2 vertex_c = float2{vertices[2].x, vertices[2].y};
 
 			float2 min_vertex = min(vertex_a, min(vertex_b, vertex_c));
-			float2 bounding_box_begin = round(clamp(min_vertex, (float2){0, 0}, (float2){width - 1, height - 1}));
+			float2 bounding_box_begin = round(
+					clamp(min_vertex,
+						  float2{0,0},
+						  float2{(float)width-1, (float)height-1})
+			);
 			float2 max_vertex = max(vertex_a, max(vertex_b, vertex_c));
-			float2 bounding_box_end = round(clamp(max_vertex, (float2){0, 0}, (float2){width - 1, height - 1}));
+			float2 bounding_box_end = round(
+					clamp(max_vertex,
+						  float2{0,0},
+						  float2{(float)width-1, (float)height-1})
+			);
 
 			float edge = edge_function(vertex_a, vertex_b, vertex_c);
 			for (float x = bounding_box_begin.x; x <= bounding_box_end.x; x += 1.f)
@@ -141,12 +158,14 @@ namespace cg::renderer
 					float edge0 = edge_function(vertex_a, vertex_b, point);
 					float edge1 = edge_function(vertex_b, vertex_c, point);
 					float edge2 = edge_function(vertex_c, vertex_a, point);
-					if(edge0 >= 0.f && edge1 >= 0.f && edge2 >= 0.f)
+					if (edge0 >= 0.f && edge1 >= 0.f && edge2 >= 0.f)
 					{
-						float u = edge1 / edge;
-						float v = edge2 / edge;
-						float w = edge0 / edge;
-						float depth = u * vertices[0].z + v * vertices[1].z + 2 * vertices[2].z;
+						float u = edge1/edge;
+						float v = edge2/edge;
+						float w = edge0/edge;
+
+						float depth = u * vertices[0].z + v * vertices[1].z + w * vertices[2].z;
+
 						size_t u_x = static_cast<size_t>(x);
 						size_t u_y = static_cast<size_t>(y);
 						if (depth_test(depth, u_x, u_y))
@@ -170,7 +189,7 @@ namespace cg::renderer
 	inline float
 	rasterizer<VB, RT>::edge_function(float2 a, float2 b, float2 c)
 	{
-		return (c.x - a.x) * (b.y - a.y) - (c.y - a.y) - (b.x - a.x);
+		return (c.x - a.x) * (b.y - a.y) - (c.y - a.y) * (b.x - a.x);
 	}
 
 	template<typename VB, typename RT>

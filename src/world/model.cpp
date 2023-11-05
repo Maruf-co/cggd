@@ -6,6 +6,8 @@
 
 #include <linalg.h>
 
+#include <iostream>
+
 
 using namespace linalg::aliases;
 using namespace cg::world;
@@ -158,7 +160,7 @@ void model::fill_buffers(const std::vector<tinyobj::shape_t>& shapes, const tiny
 					index_map[idx_tuple] = vertex_buffer_id;
 					vertex_buffer_id++;
 				}
-				index_buffer->item(index_buffer_id = index_map[idx_tuple]);
+				index_buffer->item(index_buffer_id) = index_map[idx_tuple];
 				index_buffer_id++;
 			}
 			index_offset += fv;
